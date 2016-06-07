@@ -18,17 +18,17 @@ RESTARTS=0
 while true
 do
   # echo "Check if any of the processes is not running ..."
-  ./scripts/check_all_processes.sh "$PROCS"
+  ./${BASH_SOURCE%/*}/scripts/check_all_processes.sh "$PROCS"
   CHECK_RET=$?
 
   if [ "$CHECK_RET" = "64" ]
   then
     echo -n "Kill all remaining processes ... "
-    /bin/bash scripts/kill_all_processes.sh "$PROCS"
+    /bin/bash ${BASH_SOURCE%/*}/scripts/kill_all_processes.sh "$PROCS"
     sleep 30
     
     echo -e "\nStarting for the $(( ++RESTARTS )). time ..."
-    /bin/bash scripts/restart_processes.sh >> "${LOG}_${RESTARTS}.log" 2>&1 &
+    /bin/bash ${BASH_SOURCE%/*}/scripts/restart_processes.sh >> "${LOG}_${RESTARTS}.log" 2>&1 &
     sleep 30
   elif [ "$CHECK_RET" = "0" ]
   then
