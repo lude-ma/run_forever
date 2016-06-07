@@ -23,6 +23,13 @@ do
 
   if [ "$CHECK_RET" = "64" ]
   then
+    if [ "$RESTARTS" -gt "0" ]
+    then 
+      echo -n "Get ROS log files ... "
+      /bin/bash ${BASH_SOURCE%/*}/scripts/get_ros_logs.sh "${LOG}_${RESTARTS}"
+      rm -f ${LOG}_${RESTARTS}.log
+    fi
+
     echo -n "Kill all remaining processes ... "
     /bin/bash ${BASH_SOURCE%/*}/scripts/kill_all_processes.sh "$PROCS"
     sleep 30
@@ -40,3 +47,7 @@ do
 
   sleep $CHECK_EVERY_SECONDS
 done
+
+echo -n "Get ROS log files ... "
+/bin/bash ${BASH_SOURCE%/*}/scripts/get_ros_logs.sh "${LOG}_${RESTARTS}"
+rm -f ${LOG}_${RESTARTS}.log
